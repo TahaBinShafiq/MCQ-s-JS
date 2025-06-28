@@ -51,7 +51,7 @@ h1 {
   transform: scale(1.2);
 }
 
-.btn {
+.btn-2 {
   padding: 10px 25px;
   font-size: 16px;
   background-color: #007bff;
@@ -60,6 +60,26 @@ h1 {
   border-radius: 8px;
   cursor: pointer;
   transition: background 0.3s ease;
+  max-width: fit-content;
+  margin: 0px auto;
+
+}
+.btn-2:hover {
+  background-color: #0056b3;
+}
+
+.btn {
+
+  padding: 10px 25px;
+  font-size: 16px;
+  background-color: #007bff;
+  border: none;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  max-width: fit-content;
+  margin: 0px auto;
 }
 
 .btn:hover {

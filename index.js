@@ -27,16 +27,19 @@ const questions = [
         question: "Result is Pending"
     }
 ]
+const btnSecond = document.getElementById("btn-2");
+const mcqQuestion = document.getElementById("question");
+const input = document.getElementById("input");
+const btn = document.getElementById("btn");
 
 let increamentQuestion = 0;
 function showQuestions() {
-    const mcqQuestion = document.getElementById("question");
-    const btn = document.getElementById("btn")
     mcqQuestion.innerHTML = questions[increamentQuestion].question;
     if (increamentQuestion === questions.length - 2) {
         btn.innerHTML = "Check Result"
     } else if (increamentQuestion === questions.length - 1) {
         btn.style.display = "none";
+        btnSecond.style.display = "block";
         input.innerHTML = "";
         return;
     }
@@ -64,6 +67,25 @@ function nextQuestion() {
 }
 
 
+
+
+function restartQuiz() {
+    increamentQuestion = 0;
+    btnSecond.style.display = "none";
+    btn.style.display = "block";
+    mcqQuestion.innerHTML = questions[increamentQuestion].question;
+
+    if (questions[increamentQuestion].options) {
+        input.innerHTML = "";
+        for (let i = 0; i < questions[increamentQuestion].options.length; i++) {
+            input.innerHTML += `
+                <input type="radio" name="option" id="${i}">
+                <label for="${i}">${questions[increamentQuestion].options[i]}</label><br><br>
+            `;
+        }
+    }
+    increamentQuestion++;
+}
 
 
 
