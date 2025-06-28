@@ -24,7 +24,7 @@ const questions = [
         options: ["Cat", "Cow", "Dog", "Lion"],
         answer: "Dog"
     }, {
-        question: "Result is Panding"
+        question: "Result is Pending"
     }
 ]
 
