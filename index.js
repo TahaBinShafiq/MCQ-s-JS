@@ -73,6 +73,7 @@ function restartQuiz() {
     increamentQuestion = 0;
     btnSecond.style.display = "none";
     btn.style.display = "block";
+    btn.innerHTML = "Next";
     mcqQuestion.innerHTML = questions[increamentQuestion].question;
 
     if (questions[increamentQuestion].options) {
