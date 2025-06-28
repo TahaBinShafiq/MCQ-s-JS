@@ -21,7 +21,7 @@ const questions = [
     },
     {
         question: "Which animal barks?",
-        options: ["Cat", "Cow", "Dog", "Lion"],
+        options: ["Cat", "Donkey", "Dog", "Lion"],
         answer: "Dog"
     }, {
         question: "Result is Pending"
@@ -65,9 +65,6 @@ function nextQuestion() {
         btn.innerHTML = "Check Result"
     }
 }
-
-
-
 
 function restartQuiz() {
     increamentQuestion = 0;
