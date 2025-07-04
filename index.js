@@ -25,78 +25,115 @@ const questions = [
         answer: "Dog"
     }
 ]
-const btnSecond = document.getElementById("btn-2");
+
 const mcqQuestion = document.getElementById("question");
 const input = document.getElementById("input");
 const btn = document.getElementById("btn");
 
 let increamentQuestion = 0;
 let score = 0;
+let answered = false;
+
 
 function showQuestions() {
+
+    let selected = document.querySelector('input[name="option"]:checked');
     if (increamentQuestion !== 0) {
-        let selected = document.querySelector('input[name="option"]:checked');
         if (selected === null || selected.value === '') {
             alert("Please select this option");
             return;
         }
 
-        let checkAnswerQuestion = questions[increamentQuestion - 1];
-        if (selected.value === checkAnswerQuestion.answer) {
+        const userAnswer = selected.value;
+        const correctAnswer = questions[increamentQuestion-1].answer;
+        console.log(correctAnswer)
+        console.log(userAnswer)
+
+        if (userAnswer === correctAnswer) {
             score++;
         }
+
     }
 
-
     if (increamentQuestion === questions.length) {
-        mcqQuestion.innerHTML = `Your Score: ${score} out of ${questions.length}`;
-        btn.style.display = "none";
-        btnSecond.style.display = "block";
-        input.innerHTML = "";
+        mcqQuestion.innerHTML = `Your Score is: ${score} out of ${questions.length}`;
+        input.innerHTML = '';
+        btn.innerHTML = "Restart Quiz";
+        btn.onclick = restartQuiz;
         return;
     }
 
-    mcqQuestion.innerHTML = questions[increamentQuestion].question;
 
-    if (increamentQuestion === questions.length - 1) {
-        btn.innerHTML = "Check Result"
-    } else {
-        btn.innerHTML = "Next"
-    }
-    showOption();
+    mcqQuestion.innerHTML = questions[increamentQuestion].question;
+    btn.innerHTML = "Next"
+    input.innerHTML = ""
+
+    btn.style.display = "none";
+    questions[increamentQuestion].options.map((element) => {
+        input.innerHTML += `<div onclick="stylingAnswer(this)" class="option-div"> <input type="radio"  name="option" value="${element}" id="${element}" onchange="btn.style.display='block'">
+        <label for="${element}">${element}</label> </div>`
+    })
+
     increamentQuestion++
 
-}
-
-function showOption() {
-    const input = document.getElementById("input")
-    input.innerHTML = ""
-    for (var i = 0; i < questions[increamentQuestion].options.length; i++) {
-        input.innerHTML += `<input type="radio" name="option" value="${questions[increamentQuestion].options[i]}" id="${i}"> 
-        <label for="${i}">${questions[increamentQuestion].options[i]}</label> </br> </br>`
+    if (questions.length === increamentQuestion) {
+        btn.innerHTML = "Check Result"
     }
 }
+
 
 function restartQuiz() {
+    score = 0;
     increamentQuestion = 0;
-    score = 0
-    btnSecond.style.display = "none";
-    btn.style.display = "block";
-    btn.innerHTML = "Next";
-
-    mcqQuestion.innerHTML = questions[increamentQuestion].question;
-
-    if (questions[increamentQuestion].options) {
-        input.innerHTML = "";
-        for (let i = 0; i < questions[increamentQuestion].options.length; i++) {
-            input.innerHTML += `
-                <input type="radio" name="option" value="${questions[increamentQuestion].options[i]}" id="${i}">
-                <label for="${i}">${questions[increamentQuestion].options[i]}</label><br><br>
-            `;
-        }
-    }
-    increamentQuestion++;
+    btn.onclick = showQuestions;
+    showQuestions();
 }
+
+function stylingAnswer(selectedDiv) {
+    var allOptions = document.querySelectorAll(".option-div");
+
+    for (var i = 0; i < allOptions.length; i++) {
+        allOptions[i].classList.remove("active");
+    }
+    selectedDiv.classList.add("active");
+
+    selectedDiv.querySelector("input[type=radio]").checked = true;
+
+    btn.style.display = 'block';
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
