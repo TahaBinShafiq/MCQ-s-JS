@@ -80,6 +80,8 @@ function renderQuestion(): void {
         inputContainer.innerHTML = "";
 
         // Options ko dynamically create karna
+        currentQuestion.options.sort()
+        console.log(currentQuestion.options)
         currentQuestion.options.forEach(option => {
             const optionDiv = document.createElement('div');
             optionDiv.className = 'option-div';
@@ -123,7 +125,7 @@ function checkAnswerAndProceed(): void {
     // Yeh check lagana zaroori hai
     if (currentQuestionIndex < questions.length) {
         const userAnswer = selectedOption.value;
-        const correctAnswer: string | number[] = questions[currentQuestionIndex].answer;
+        const correctAnswer: string = questions[currentQuestionIndex]!.answer;
 
         if (userAnswer === correctAnswer) {
             score++;
