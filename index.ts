@@ -39,7 +39,8 @@ const questions: Question[] = [
 const mcqQuestion = document.getElementById("question") as HTMLElement;
 const inputContainer = document.getElementById("input") as HTMLElement;
 const nextBtn = document.getElementById("btn") as HTMLButtonElement;
-const errorMessage = document.getElementById("error-message") as HTMLElement;
+const startBtn = document.getElementById("start-btn") as HTMLButtonElement;
+const errorMessage = document.getElementById("error-message") as HTMLElement | null;
 
 // State variables
 let currentQuestionIndex: number = 0;
@@ -50,39 +51,57 @@ function startQuiz(): void {
     score = 0;
     currentQuestionIndex = 0;
     nextBtn.textContent = "Next";
+    nextBtn.style.display = 'block'; // Next button show karein
+    startBtn.style.display = 'none'; // Start button hide karein
+    nextBtn.onclick = checkAnswerAndProceed; // Button ka click handler yahan set kiya hai
     renderQuestion();
 }
 
 // Yeh function current sawal aur options ko UI par display karta hai
 function renderQuestion(): void {
-    errorMessage.style.display = 'none'; // Error message hide karein
+    if (errorMessage) {
+        errorMessage.style.display = 'none'; // Error message hide karein
+    }
+
     if (currentQuestionIndex >= questions.length) {
         // Quiz khatam ho gaya hai, result show karein
         mcqQuestion.innerHTML = `Your Score is: ${score} out of ${questions.length}`;
         inputContainer.innerHTML = '';
-        nextBtn.textContent = "Restart Quiz";
-        nextBtn.onclick = startQuiz;
+        nextBtn.style.display = 'none'; // Next button hide karein
+        startBtn.textContent = "Restart Quiz";
+        startBtn.style.display = 'block'; // Start button show karein
+        startBtn.onclick = startQuiz; // Button ka click handler dobara set kiya hai
         return;
     }
 
-    const currentQuestion = questions[currentQuestionIndex];
-    mcqQuestion.textContent = currentQuestion.question;
-    inputContainer.innerHTML = "";
+    const currentQuestion: Question | undefined = questions[currentQuestionIndex];
+    if (currentQuestion) { // Naya safety check
+        mcqQuestion.textContent = currentQuestion.question;
+        inputContainer.innerHTML = "";
 
-    // Options ko dynamically create karna
-    currentQuestion.options.forEach(option => {
-        const optionDiv = document.createElement('div');
-        optionDiv.className = 'option-div';
-        optionDiv.onclick = () => stylingAnswer(optionDiv);
+        // Options ko dynamically create karna
+        currentQuestion.options.forEach(option => {
+            const optionDiv = document.createElement('div');
+            optionDiv.className = 'option-div';
+            optionDiv.onclick = () => stylingAnswer(optionDiv);
 
-        optionDiv.innerHTML = `
-            <input type="radio" name="option" value="${option}" id="${option}">
-            <label for="${option}">${option}</label>
-        `;
-        inputContainer.appendChild(optionDiv);
-    });
+            optionDiv.innerHTML = `
+                <input type="radio" name="option" value="${option}" id="${option}">
+                <label for="${option}">${option}</label>
+            `;
+            inputContainer.appendChild(optionDiv);
+        });
 
-    nextBtn.style.display = "none";
+        nextBtn.style.display = "none";
+    } else {
+        // Agar galti se question undefined ho jaye to yeh message dikhao
+        console.error("Error: Could not find question data.");
+        mcqQuestion.textContent = "Error loading question data.";
+        inputContainer.innerHTML = "";
+        nextBtn.style.display = "block";
+        nextBtn.textContent = "Restart Quiz";
+        nextBtn.onclick = startQuiz;
+    }
 }
 
 // Har click par jawab check karta hai aur agle sawal par jata hai
@@ -90,17 +109,21 @@ function checkAnswerAndProceed(): void {
     const selectedOption = document.querySelector<HTMLInputElement>('input[name="option"]:checked');
 
     if (!selectedOption) {
-        errorMessage.textContent = "Please select an option!";
-        errorMessage.style.display = 'block';
+        if (errorMessage) {
+            errorMessage.textContent = "Please select an option!";
+            errorMessage.style.display = 'block';
+        }
         return;
     }
 
-    errorMessage.style.display = 'none'; // Error message hide karein
+    if (errorMessage) {
+        errorMessage.style.display = 'none'; // Error message hide karein
+    }
 
     // Yeh check lagana zaroori hai
     if (currentQuestionIndex < questions.length) {
         const userAnswer = selectedOption.value;
-        const correctAnswer = questions[currentQuestionIndex].answer;
+        const correctAnswer: string | number[] = questions[currentQuestionIndex].answer;
 
         if (userAnswer === correctAnswer) {
             score++;
@@ -125,10 +148,15 @@ function stylingAnswer(selectedDiv: HTMLDivElement): void {
     nextBtn.style.display = 'block';
 }
 
-// Event Listeners set karna
-nextBtn.addEventListener('click', checkAnswerAndProceed);
+// Start button ke liye initial setup
+function initializeQuizApp(): void {
+    mcqQuestion.innerHTML = '<h1>Welcome to the Quiz App!</h1><p>Click the button below to start the quiz.</p>';
+    inputContainer.innerHTML = '';
+    nextBtn.style.display = 'none';
+    startBtn.style.display = 'block';
+    startBtn.textContent = 'Start Quiz';
+    startBtn.onclick = startQuiz;
+}
 
-// Quiz shuru karein
-startQuiz();
-
-
+// App ko shuru karein
+initializeQuizApp();
