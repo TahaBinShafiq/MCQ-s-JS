@@ -32,6 +32,7 @@ const inputContainer = document.getElementById("input");
 const nextBtn = document.getElementById("btn");
 const startBtn = document.getElementById("start-btn");
 const errorMessage = document.getElementById("error-message");
+let shuffledQuestions = [];
 // State variables
 let currentQuestionIndex = 0;
 let score = 0;
@@ -65,6 +66,7 @@ function renderQuestion() {
         mcqQuestion.textContent = currentQuestion.question;
         inputContainer.innerHTML = "";
         // Options ko dynamically create karna
+        currentQuestion.options.sort(() => Math.random() - 0.5);
         currentQuestion.options.forEach(option => {
             const optionDiv = document.createElement('div');
             optionDiv.className = 'option-div';

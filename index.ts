@@ -41,6 +41,7 @@ const inputContainer = document.getElementById("input") as HTMLElement;
 const nextBtn = document.getElementById("btn") as HTMLButtonElement;
 const startBtn = document.getElementById("start-btn") as HTMLButtonElement;
 const errorMessage = document.getElementById("error-message") as HTMLElement | null;
+let shuffledQuestions: Question[] = [];
 
 // State variables
 let currentQuestionIndex: number = 0;
@@ -73,6 +74,7 @@ function renderQuestion(): void {
         startBtn.onclick = startQuiz; // Button ka click handler dobara set kiya hai
         return;
     }
+    
 
     const currentQuestion: Question | undefined = questions[currentQuestionIndex];
     if (currentQuestion) { // Naya safety check
@@ -80,8 +82,7 @@ function renderQuestion(): void {
         inputContainer.innerHTML = "";
 
         // Options ko dynamically create karna
-        currentQuestion.options.sort()
-        console.log(currentQuestion.options)
+        currentQuestion.options.sort(() => Math.random() - 0.5)
         currentQuestion.options.forEach(option => {
             const optionDiv = document.createElement('div');
             optionDiv.className = 'option-div';
